@@ -1,0 +1,55 @@
+# Maven
+target/
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.versionsBackup
+pom.xml.next
+release.properties
+dependency-reduced-pom.xml
+buildNumber.properties
+
+# Logs
+*.log
+logs/
+
+# IDEs
+.idea/
+*.iml
+*.iws
+*.ipr
+
+# OS Files
+.DS_Store
+Thumbs.db
+
+# Class files
+*.class
+
+# Test output
+test-output/
+
+# Java
+*.jar
+*.war
+*.ear
+
+# Docker
+*.env
+docker-compose.override.yml
+
+# Spring Boot
+spring.log
+
+# Intellij
+out/
+
+# VS Code
+.vscode/
+
+# Environment files
+.env
+.env.*
+
+# Swagger docs (if generated to disk)
+swagger.json
+swagger.yaml

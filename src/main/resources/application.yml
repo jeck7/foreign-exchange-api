@@ -1,0 +1,32 @@
+spring:
+  datasource:
+    url: jdbc:h2:mem:testdb
+    driverClassName: org.h2.Driver
+    username: sa
+    password:
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+  h2:
+    console:
+      enabled: true
+
+server:
+  port: 8080
+
+springdoc:
+  api-docs:
+    path: /v3/api-docs
+  swagger-ui:
+    path: /swagger-ui.html
+    enabled: true
+
+exchange:
+  provider: exchangeratehost # Options: exchangeratehost, fixer, currencylayer
+  fixer:
+    api-key: your_fixer_api_key
+    url: http://data.fixer.io/api
+  currencylayer:
+    api-key: your_currencylayer_api_key
+    url: http://api.currencylayer.com
