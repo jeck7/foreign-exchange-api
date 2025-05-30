@@ -7,6 +7,7 @@ import com.example.demo.repository.CurrencyConversionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -44,6 +45,13 @@ public class ExchangeRateService {
 
     @Cacheable(value = "exchangeRates", key = "#from + '_' + #to")
     public double getExchangeRate(String from, String to) {
+        String url = buildUrl(from, to, 1);
+        Map response = restTemplate.getForObject(url, Map.class);
+        return extractRate(response);
+    }
+
+    @CachePut(value = "exchangeRates", key = "#from + '_' + #to")
+    public double updateExchangeRate(String from, String to, double newRate) {
         String url = buildUrl(from, to, 1);
         Map response = restTemplate.getForObject(url, Map.class);
         return extractRate(response);
