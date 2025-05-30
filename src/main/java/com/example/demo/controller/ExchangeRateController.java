@@ -10,9 +10,10 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/exchange")
@@ -39,21 +40,16 @@ public class ExchangeRateController {
             @RequestParam(required = false) String id,
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date date) {
 
-        //return service.getConversions(Optional.ofNullable(id), Optional.ofNullable(date));
-        return service.getAllConversions();
+        return service.getConversions(Optional.ofNullable(id), Optional.ofNullable(date));
+//        return service.getAllConversions();
     }
-
 
     @GetMapping("/historyPagable")
     public ResponseEntity<Page<CurrencyConversion>> getConversionHistory(
             @RequestParam(required = false) String transactionId,
-            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime date,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size) {
-
-        if (transactionId == null && date == null) {
-            return ResponseEntity.badRequest().build();
-        }
 
         Pageable pageable = PageRequest.of(page, size);
         Page<CurrencyConversion> results = service.getHistory(transactionId, date, pageable);

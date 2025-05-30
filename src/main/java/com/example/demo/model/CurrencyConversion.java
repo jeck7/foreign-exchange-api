@@ -2,6 +2,7 @@ package com.example.demo.model;
 
 import jakarta.persistence.*;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
@@ -21,6 +22,6 @@ public class CurrencyConversion {
     private double amount;
     private double convertedAmount;
     private double rate;
-    private LocalDateTime transactionDate;
+    private LocalDate transactionDate;
     private LocalDateTime timestamp = LocalDateTime.now();
 }

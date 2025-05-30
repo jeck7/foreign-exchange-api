@@ -1,5 +1,7 @@
 package com.example.demo.service;
 
+import com.example.demo.exception.ApiException;
+import com.example.demo.exception.InternalException;
 import com.example.demo.model.CurrencyConversion;
 import com.example.demo.repository.CurrencyConversionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,12 +9,16 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
 
+
 @Service
+@Transactional
 public class ExchangeRateService {
 
     @Autowired
@@ -53,7 +59,13 @@ public class ExchangeRateService {
         conversion.setAmount(amount);
         conversion.setConvertedAmount(result);
         conversion.setRate(rate);
-        repository.save(conversion);
+        conversion.setTransactionDate(LocalDate.now());
+        try {
+            repository.save(conversion);
+        } catch (Exception e) {
+            throw new InternalException("Cannot save currency conversion");
+        }
+
         return conversion;
     }
 
@@ -70,21 +82,22 @@ public class ExchangeRateService {
             return repository.findByTimestampBetween(
                     new java.sql.Timestamp(start.getTime()).toLocalDateTime(),
                     new java.sql.Timestamp(end.getTime()).toLocalDateTime());
+        } else {
+            return getAllConversions();
         }
-        return List.of();
     }
 
     public List<CurrencyConversion> getAllConversions() {
         return repository.findAll();
     }
 
-    public Page<CurrencyConversion> getHistory(String id, LocalDateTime date, Pageable pageable) {
+    public Page<CurrencyConversion> getHistory(String id, LocalDate date, Pageable pageable) {
         if (id != null && !id.isEmpty()) {
             return repository.findById(id, pageable);
         } else if (date != null) {
             return repository.findByTransactionDate(date, pageable);
         } else {
-            throw new IllegalArgumentException("Either transactionId or date must be provided");
+            throw new ApiException("ERR_INVALID_INPUT", "Either transactionId or date must be provided");
         }
     }
 
