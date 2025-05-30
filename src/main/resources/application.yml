@@ -11,6 +11,8 @@ spring:
   h2:
     console:
       enabled: true
+  cache:
+    type: simple
 
 server:
   port: 8080
@@ -30,3 +32,7 @@ exchange:
   currencylayer:
     api-key: your_currencylayer_api_key
     url: http://api.currencylayer.com
+
+logging:
+  level:
+    org.springframework.cache: DEBUG
